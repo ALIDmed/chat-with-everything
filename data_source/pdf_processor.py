@@ -16,3 +16,8 @@ class PdfProcessor(BaseProcessor):
 
     def chunk(self):
         self.docs = self.text_splitter.split_documents(self.documents)
+
+    def process(self):
+        self.load()
+        self.chunk()
+        return self.docs
