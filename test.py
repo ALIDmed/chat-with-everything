@@ -7,3 +7,4 @@ processor = YoutubeProcessor(url=
                              text_splitter=splitter
                              )
 docs = processor.process()
+print(docs)
