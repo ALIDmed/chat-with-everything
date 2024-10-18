@@ -14,6 +14,7 @@ class PdfProcessor(BaseProcessor):
             loader = PyMuPDFLoader(file_path)
             documents = loader.load()
             self.documents.extend(documents)
+        return documents
 
     def chunk(self):
         self.docs = self.text_splitter.split_documents(self.documents)
@@ -26,9 +27,3 @@ class PdfProcessor(BaseProcessor):
         self.vector_store_name = hashlib.sha256(
             combined_content.encode('utf-8')
             ).hexdigest()
-
-    def process(self):
-        self.load()
-        self.chunk()
-        self.generate_vector_store_name()
-        return self.docs
