@@ -5,15 +5,20 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from embeddings.embeddings import GeminiEmbeddings
 
 # Initialize the processors
-pdf_processor = PdfProcessor(file_path="./files/Ali_AMZYL_Resume.pdf")
+pdf_processor = PdfProcessor(
+    file_paths=["./files/Ali_AMZYL_Resume.pdf", "./files/ds_interview_prep.pdf"]
+    )
 
 docs = pdf_processor.process()
+for doc in docs:
+    print(doc.page_content)
+    print('-'*50)
+    print("\n\n")
+# embeddings = GeminiEmbeddings(db_dir='./db')
+# embeddings.generate_embdeddings(docs)
 
-embeddings = GeminiEmbeddings(db_dir='./db')
-embeddings.generate_embdeddings(docs)
+# # Retrieve relevant documents
+# query = "what is movie whisper"
+# relevant_docs = embeddings.retrieve(query)
 
-# Retrieve relevant documents
-query = "what is movie whisper"
-relevant_docs = embeddings.retrieve(query)
-
-print(relevant_docs)
+# print(relevant_docs)

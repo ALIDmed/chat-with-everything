@@ -3,7 +3,7 @@ from langchain.text_splitter import CharacterTextSplitter
 
 class BaseProcessor(ABC):
 
-    def __init__(self, chunk_size=100, chunk_overlap=20, text_splitter=None):
+    def __init__(self, chunk_size=200, chunk_overlap=20, text_splitter=None):
         self.text_splitter = text_splitter or CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
     def load(self):
