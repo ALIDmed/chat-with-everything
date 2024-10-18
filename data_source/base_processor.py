@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from langchain.text_splitter import CharacterTextSplitter
+import hashlib
 
 class BaseProcessor(ABC):
 
@@ -10,16 +11,20 @@ class BaseProcessor(ABC):
         """
         load data
         """
-    @abstractmethod
     def chunk(self):
         """
         data chunking
         """
-    @abstractmethod
+        self.docs = self.text_splitter.split_documents(self.documents)
+
     def generate_vector_store_name(self):
-        """
-        generate vector store name
-        """
+        if not self.documents:
+            raise Exception("call process() before generating vector store name")
+        
+        combined_content = "".join([doc.page_content for doc in self.documents])
+        self.vector_store_name = hashlib.sha256(
+            combined_content.encode('utf-8')
+            ).hexdigest()
 
     def process(self):
         """
