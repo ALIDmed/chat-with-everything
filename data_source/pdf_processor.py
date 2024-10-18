@@ -19,3 +19,6 @@ class PdfProcessor(BaseProcessor):
         self.load()
         self.chunk()
         return self.docs
+    
+    def generate_vector_store_name(self):
+        pass

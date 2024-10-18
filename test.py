@@ -4,13 +4,16 @@ from data_source.article_processor import ArticleProcessor
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from embeddings.embeddings import GeminiEmbeddings
 
-# url = "https://medium.com/@tejpal.abhyuday/retrieval-augmented-generation-rag-from-basics-to-advanced-a2b068fd576c"
-# splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
-# processor = ArticleProcessor(url=url, text_splitter=splitter)
-# docs = processor.process()
-# for doc in docs:
-#     print(doc.page_content)
-#     print("\n\n\n\n")
+# Initialize the processors
+pdf_processor = PdfProcessor(file_path="./files/Ali_AMZYL_Resume.pdf")
 
-db_dir = './db'
-GeminiEmbeddings(db_dir=db_dir)
+docs = pdf_processor.process()
+
+embeddings = GeminiEmbeddings(db_dir='./db')
+embeddings.generate_embdeddings(docs)
+
+# Retrieve relevant documents
+query = "what is movie whisper"
+relevant_docs = embeddings.retrieve(query)
+
+print(relevant_docs)
