@@ -1,19 +1,23 @@
 import os
 from data_source.pdf_processor import PdfProcessor
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from embeddings.embeddings import Embeddings
+from embeddings.embeddings import GeminiEmbeddings
 
-pdf_file_path = "./files/Ali_AMZYL_Resume.pdf"
-file_name = os.path.basename(pdf_file_path)
-pdf = PdfProcessor(
-    file_path=pdf_file_path,
-    text_splitter=RecursiveCharacterTextSplitter(chunk_size=10, chunk_overlap=0)
-)
+INPUT_SOURCE = ["./files/ds_interview_prep.pdf"]
+DB_DIR = "./db"
 
-docs = pdf.process()
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
+processor = PdfProcessor(file_paths=INPUT_SOURCE, text_splitter=text_splitter)
+docs = processor.process()
+vectore_store_name = processor.generate_vector_store_name()
 
-embeddings = Embeddings(db_dir="./db")
-store_name = embeddings.generate_store_name(file_name)
-# embeddings.create_vectore_store(docs)
-relevant_docs = embeddings.query_vectore_store("python")
-print(relevant_docs)
+print(vectore_store_name)
+
+embeddings = GeminiEmbeddings(db_dir=os.path.join(DB_DIR, vectore_store_name))
+embeddings.generate_embdeddings(docs)
+
+query = "What is upsampling and downsampling with examples?"
+relevant_docs = embeddings.retrieve(query)
+
+for relevant_doc in relevant_docs:
+    print(relevant_doc.page_content)

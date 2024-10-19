@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from langchain.text_splitter import CharacterTextSplitter
-import hashlib
+import uuid
 
 class BaseProcessor(ABC):
 
@@ -18,13 +18,12 @@ class BaseProcessor(ABC):
         self.docs = self.text_splitter.split_documents(self.documents)
 
     def generate_vector_store_name(self):
-        if not self.documents:
-            raise Exception("call process() before generating vector store name")
-        
-        combined_content = "".join([doc.page_content for doc in self.documents])
-        self.vector_store_name = hashlib.sha256(
-            combined_content.encode('utf-8')
-            ).hexdigest()
+            if not self.documents:
+                raise Exception("call process() before generating vector store name")
+            
+            combined_content = "".join([doc.page_content for doc in self.documents])
+            self.vector_store_name = str(uuid.uuid5(uuid.NAMESPACE_DNS, combined_content))
+            return self.vector_store_name
 
     def process(self):
         """

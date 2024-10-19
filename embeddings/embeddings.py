@@ -19,6 +19,7 @@ class GeminiEmbeddings(EmbeddingStrategy):
             google_api_key=os.getenv('GOOGLE_API_KEY'),
             model=self.embedding_model
         )
+        os.makedirs(self.db_dir, exist_ok=True)
 
     def generate_embdeddings(self, docs):
 
