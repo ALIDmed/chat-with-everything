@@ -2,6 +2,7 @@ import os
 from data_source.pdf_processor import PdfProcessor
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from embeddings.embeddings import GeminiEmbeddings
+from langchain_core.messages import HumanMessage, AIMessage
 from chatwrapper import ChatWrapper
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
@@ -25,7 +26,23 @@ llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", api_key=os.getenv('GOOGLE
 chat_wrapper = ChatWrapper(embeddings, llm)
 chat_wrapper.setup_retrieval_chain()
 
-query = "What is the correlation and coefficient?"
-res = chat_wrapper.chat(query=query, chat_history=[])
-for chunk in res:
-    print(chunk, end="", flush=True)
+query = "What is the first convolutional network"
+# res = chat_wrapper.chat(query=query, chat_history=[])
+# for chunk in res:
+#     print(chunk, end="", flush=True)
+
+print("Start chating with the AI. type 'exit' to end the conversation")
+chat_history = []
+while True:
+    query = input("You: ")
+    if query.lower() == "exit":
+        break
+    res = chat_wrapper.chat(query=query, chat_history=[])
+    full_response = ""
+    print("AI: ", end="")
+    for chunk in res:
+        full_response += chunk
+        print(chunk, end="", flush=True)
+
+    chat_history.append(HumanMessage(query))
+    chat_history.append(AIMessage(full_response))
