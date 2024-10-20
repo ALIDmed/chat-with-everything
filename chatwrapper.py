@@ -32,5 +32,7 @@ class ChatWrapper:
         self.rag_chain = create_retrieval_chain(self.history_aware_retriever, question_answer_chain)
 
     def chat(self, query, chat_history):
-        response = self.rag_chain.invoke({"input": query, "chat_history": chat_history})
-        return response['answer']
+        response = self.rag_chain.stream({"input": query, "chat_history": chat_history})
+        for chunk in response:
+            if chunk.get('answer', None):
+                yield chunk['answer']

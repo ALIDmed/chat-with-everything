@@ -27,4 +27,5 @@ chat_wrapper.setup_retrieval_chain()
 
 query = "What is the correlation and coefficient?"
 res = chat_wrapper.chat(query=query, chat_history=[])
-print(res)
+for chunk in res:
+    print(chunk, end="", flush=True)

@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
-from langchain_community.vectorstores import Chroma
+from langchain_chroma.vectorstores import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 load_dotenv()
